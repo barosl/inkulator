@@ -1,4 +1,4 @@
-module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_rw, lcd_en, lcd_rs, lcd_on, lcd_bl_on, vga_r, vga_g, vga_b, vga_hs, vga_vs, vga_clk, vga_blank, vga_sync);
+module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_rw, lcd_en, lcd_rs, lcd_on, lcd_bl_on, vga_r, vga_g, vga_b, vga_hs, vga_vs, vga_clk, vga_blank, vga_sync, uart_rxd, uart_txd);
 	input [17:0] swits;
 	input [3:0] butts;
 	output [17:0] leds;
@@ -13,6 +13,8 @@ module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_r
 	output [9:0] vga_r, vga_g, vga_b;
 	output vga_hs, vga_vs;
 	output vga_clk, vga_blank, vga_sync;
+	input uart_rxd;
+	output uart_txd;
 
 	/* Debugging output */
 
@@ -58,6 +60,48 @@ module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_r
 	end
 
 	vga u_vga(vga_r, vga_g, vga_b, vga_hs, vga_vs, vga_clk, vga_blank, x, y, rst, r, g, b, clk_25m);
+
+	/* UART module */
+
+	wire tx_rdy, rx_rdy;
+	reg tx_en;
+	reg [7:0] tx_data;
+	wire [7:0] rx_data;
+
+	reg [3:0] i;
+	reg [1:0] st;
+	reg [7:0] text[14:0];
+
+	always @(posedge clk_50m or posedge rst) begin
+		if (rst) begin
+			i <= 0;
+			st <= 0;
+
+			text[0] <= "H";
+			text[1] <= "e";
+			text[2] <= "l";
+			text[3] <= "l";
+			text[4] <= "o";
+			text[5] <= ",";
+			text[6] <= " ";
+			text[7] <= "w";
+			text[8] <= "o";
+			text[9] <= "r";
+			text[10] <= "l";
+			text[11] <= "d";
+			text[12] <= "!";
+			text[13] <= "\r";
+			text[14] <= "\n";
+
+		end else begin
+			case (st)
+				0: if (tx_rdy & (i < 14+1)) begin tx_en <= 1; tx_data <= text[i]; i <= i + 1; st <= 1; end
+				1: if (~tx_rdy) begin tx_en <= 0; st <= 0; end
+			endcase
+		end
+	end
+
+	uart u_uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, clk_50m);
 
 	/* Input signals */
 
