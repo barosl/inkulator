@@ -27,13 +27,12 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 				tx_clks = 0;
 
 				case (tx_st)
-					1: uart_txd <= 1;
-					2: uart_txd <= 0;
-					3+TX_DATA_BW: uart_txd <= 1;
-					default: uart_txd <= tx_data0[tx_st-3];
+					1: uart_txd <= 0;
+					default: uart_txd <= tx_data0[tx_st-2];
+					2+TX_DATA_BW: uart_txd <= 1;
 				endcase
 
-				tx_st = (tx_st+1) % (4+TX_DATA_BW);
+				tx_st = (tx_st+1) % (3+TX_DATA_BW);
 			end
 
 		end else if (tx_en) begin
