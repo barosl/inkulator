@@ -18,13 +18,9 @@ module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_r
 
 	/* Debugging output */
 
-	reg [3:0] num;
+	wire [3:0] debug;
 
-	always @(posedge rst) begin
-		num <= 0;
-	end
-
-	seseg u_seseg0(seseg0, num);
+	seseg u_seseg0(seseg0, debug);
 	seseg u_seseg1(seseg1, vga_hs);
 	seseg u_seseg2(seseg2, vga_vs);
 
@@ -95,7 +91,19 @@ module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_r
 
 		end else begin
 			case (st)
-				0: if (tx_rdy & (i < 14+1)) begin tx_en <= 1; tx_data <= text[i]; i <= i + 1; st <= 1; end
+				0:
+					if (tx_rdy) begin
+						if (i < 14+1) begin
+							tx_en <= 1;
+							tx_data <= text[i];
+							i <= i + 1;
+							st <= 1;
+						end else if (rx_rdy) begin
+							tx_en <= 1;
+							tx_data <= rx_data;
+							st <= 1;
+						end
+					end
 				1: if (~tx_rdy) begin tx_en <= 0; st <= 0; end
 			endcase
 		end
