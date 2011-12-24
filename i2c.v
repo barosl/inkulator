@@ -52,9 +52,9 @@ module i2c(i2c_sclk, i2c_sdat, i2c_done, rst, clk_50m);
 		case (cmd_idx)
 			0: cmd <= 16'h0017; /* left line in (volume: 0dB) */
 			1: cmd <= 16'h0217; /* right line in (volume: 0dB) */
-			2: cmd <= 16'h0479; /* left headphone out (volume: 0dB) */
-			3: cmd <= 16'h0679; /* right headphone out (volume: 0dB) */
-			4: cmd <= 16'h08F8; /* analogue audio path */
+			2: cmd <= 16'h0451; /* left headphone out (volume: -40dB) */
+			3: cmd <= 16'h0651; /* right headphone out (volume: -40dB) */
+			4: cmd <= 16'h08D0; /* analog audio path (mute line input and mic) */
 			5: cmd <= 16'h0A06; /* digital audio path (de-emphasis: 48kHz) */
 			6: cmd <= 16'h0C00; /* power down (nothing) */
 			7: cmd <= 16'h0E01; /* audio format (I2S, MSB-first, left-justified, 16-bit) */
