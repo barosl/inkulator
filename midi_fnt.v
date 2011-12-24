@@ -1,0 +1,74 @@
+module midi_fnt(smpl, idx);
+	output reg [15:0] smpl;
+	input [5:0] idx;
+
+	always @(idx) begin
+		case (idx)
+			0: smpl = 16'h0;
+			1: smpl = 16'h0;
+			2: smpl = 16'h0;
+			3: smpl = 16'h0;
+			4: smpl = 16'h0;
+			5: smpl = 16'h0;
+			6: smpl = 16'h0;
+			7: smpl = 16'h366;
+			8: smpl = 16'h782;
+			9: smpl = 16'hC60;
+			10: smpl = 16'h1208;
+			11: smpl = 16'h183A;
+			12: smpl = 16'h1E44;
+			13: smpl = 16'h23EB;
+			14: smpl = 16'h299B;
+			15: smpl = 16'h2EDE;
+			16: smpl = 16'h3339;
+			17: smpl = 16'h36B0;
+			18: smpl = 16'h38CC;
+			19: smpl = 16'h38FD;
+			20: smpl = 16'h3766;
+			21: smpl = 16'h34AA;
+			22: smpl = 16'h30FA;
+			23: smpl = 16'h2C38;
+			24: smpl = 16'h2697;
+			25: smpl = 16'h2056;
+			26: smpl = 16'h1984;
+			27: smpl = 16'h1224;
+			28: smpl = 16'hA8A;
+			29: smpl = 16'h385;
+			30: smpl = 16'hFDA8;
+			31: smpl = 16'hF8E0;
+			32: smpl = 16'hF4F2;
+			33: smpl = 16'hF192;
+			34: smpl = 16'hEE42;
+			35: smpl = 16'hEB00;
+			36: smpl = 16'hE84A;
+			37: smpl = 16'hE650;
+			38: smpl = 16'hE50C;
+			39: smpl = 16'hE496;
+			40: smpl = 16'hE48C;
+			41: smpl = 16'hE47C;
+			42: smpl = 16'hE465;
+			43: smpl = 16'hE412;
+			44: smpl = 16'hE361;
+			45: smpl = 16'hE2CC;
+			46: smpl = 16'hE2BC;
+			47: smpl = 16'hE31C;
+			48: smpl = 16'hE3E9;
+			49: smpl = 16'hE515;
+			50: smpl = 16'hE678;
+			51: smpl = 16'hE7D8;
+			52: smpl = 16'hE91B;
+			53: smpl = 16'hEA5E;
+			54: smpl = 16'hEBC1;
+			55: smpl = 16'hED67;
+			56: smpl = 16'hEF6D;
+			57: smpl = 16'hF1FA;
+			58: smpl = 16'hF4F2;
+			59: smpl = 16'hF7D9;
+			60: smpl = 16'hFA78;
+			61: smpl = 16'hFCD7;
+			62: smpl = 16'hFEF7;
+			63: smpl = 16'hDA;
+			default: smpl = 0;
+		endcase
+	end
+endmodule
