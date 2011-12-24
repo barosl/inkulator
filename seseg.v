@@ -1,8 +1,6 @@
 module seseg(seseg, num);
-	output [6:0] seseg;
+	output reg [6:0] seseg;
 	input [3:0] num;
-
-	reg [6:0] seseg;
 
 	always @(num) begin
 		case (num)

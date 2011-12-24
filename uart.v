@@ -59,7 +59,7 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 		end
 	end
 
-	uart_clk u_uart_clk(tx_clk, rx_clk, rst, clk_50m);
+	uart_clk uart_clk_u(tx_clk, rx_clk, rst, clk_50m);
 
 	assign tx_rdy = !tx_st;
 endmodule
