@@ -41,11 +41,11 @@ module main(swits, butts, leds, seseg0, seseg1, seseg2, clk_50m, lcd_data, lcd_r
 	reg [7:0] r, g, b;
 	wire [9:0] x, y;
 
-	parameter border_w = 100;
+	parameter BORDER_W = 100;
 
 	always @(x or y) begin
 		r = 0;
-		g = (((x < border_w) | (x >= 640-border_w)) & ((y < border_w) | (y >= 480-border_w))) ? 255 : 0;
+		g = (((x < BORDER_W) | (x >= 640-BORDER_W)) & ((y < BORDER_W) | (y >= 480-BORDER_W))) ? 255 : 0;
 		b = 0;
 
 		if ((y >= 200) & (y < 200+100)) begin
