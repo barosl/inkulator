@@ -13,11 +13,14 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 
 	reg [3:0] tx_st;
 	reg [7:0] tx_data0;
-	reg [6:0] rx_st;
+	reg [7:0] rx_st;
+	reg [3:0] rx_idx;
 
 	always @(posedge tx_clk or posedge rst) begin
 		if (rst) begin
 			tx_st <= 0;
+			tx_data0 <= 0;
+
 			uart_txd <= 1;
 
 		end else if (tx_st) begin
@@ -39,22 +42,25 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 	always @(posedge rx_clk or posedge rst) begin
 		if (rst) begin
 			rx_st <= 0;
+			rx_idx <= 0;
+
 			rx_rdy = 0;
 
 		end else if (rx_st) begin
 			casex (rx_st)
-				1+(DATA_BW+1)*8+4: begin if (uart_rxd == 1) rx_rdy <= 1; end
-				3'b101:;
-				4'bx101: rx_data[(rx_st>>3)-1] <= uart_rxd;
+				4'b1001+(DATA_BW+1)*16: begin if (uart_rxd == 1) rx_rdy <= 1; end
+				4'b1001:;
+				5'bx1001: begin rx_data[rx_idx] <= uart_rxd; rx_idx <= rx_idx + 1; end
 			endcase
 
-			rx_st = (rx_st+1) % (2+(DATA_BW+1)*8+4);
+			rx_st = (rx_st+1) % (4'b1001+(DATA_BW+1)*16+1);
 
 		end else begin
-			rx_rdy = 0;
+			rx_rdy <= 0;
 
 			if (uart_rxd == 0) begin
-				rx_st = 1;
+				rx_st <= 1;
+				rx_idx <= 0;
 			end
 		end
 	end
