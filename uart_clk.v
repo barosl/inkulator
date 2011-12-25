@@ -15,8 +15,10 @@ module uart_clk(tx_clk, rx_clk, rst, clk_50m);
 		end else begin
 			cnt = (cnt + 1) % CLKS_PER_BIT;
 
-			if ((cnt == 0) | (cnt == CLKS_PER_BIT/2)) tx_clk = ~tx_clk;
-			if ((cnt == 0) | (cnt == CLKS_PER_BIT/4) | (cnt == CLKS_PER_BIT/2) | (cnt == CLKS_PER_BIT*3/4)) rx_clk = ~rx_clk;
+			if ((cnt == 0) | (cnt == CLKS_PER_BIT/2)) tx_clk <= ~tx_clk;
+
+			/* 8x oversampling */
+			if (cnt % (CLKS_PER_BIT/16) == 0) rx_clk <= ~rx_clk;
 		end
 	end
 endmodule

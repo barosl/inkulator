@@ -13,7 +13,7 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 
 	reg [3:0] tx_st;
 	reg [7:0] tx_data0;
-	reg [4:0] rx_st;
+	reg [6:0] rx_st;
 
 	always @(posedge tx_clk or posedge rst) begin
 		if (rst) begin
@@ -43,12 +43,12 @@ module uart(uart_txd, uart_rxd, tx_rdy, rx_rdy, rst, tx_en, tx_data, rx_data, cl
 
 		end else if (rx_st) begin
 			casex (rx_st)
-				1:;
-				DATA_BW*2+2: if (uart_rxd == 1) rx_rdy = 1;
-				2'bx0: rx_data[rx_st/2-1] <= uart_rxd;
+				1+(DATA_BW+1)*8+4: begin if (uart_rxd == 1) rx_rdy <= 1; end
+				3'b101:;
+				4'bx101: rx_data[(rx_st>>3)-1] <= uart_rxd;
 			endcase
 
-			rx_st = (rx_st+1) % (DATA_BW*2+3);
+			rx_st = (rx_st+1) % (2+(DATA_BW+1)*8+4);
 
 		end else begin
 			rx_rdy = 0;
